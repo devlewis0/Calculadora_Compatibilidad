@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Compatibilidad de Nombres</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+            background-color: #0a0a2a;
+            color: #fff;
+        }
+        #stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        .container {
+            position: relative;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 2rem;
+            background-color: rgba(20, 20, 50, 0.8);
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #ffd700;
+            font-size: 2em;
+            margin-bottom: 30px;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+        input, button {
+            display: block;
+            width: 100%;
+            margin: 15px 0;
+            padding: 12px;
+            font-size: 1rem;
+            box-sizing: border-box;
+            border-radius: 5px;
+            border: none;
+        }
+        input {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #fff;
+        }
+        button {
+            background-color: #ffd700;
+            color: #0a0a2a;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+        button:hover {
+            background-color: #ffec8b;
+            box-shadow: 0 0 15px #ffd700;
+        }
+        #resultado {
+            margin-top: 30px;
+            text-align: left;
+            background-color: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 10px;
+        }
+        #compatibilidad {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #ffd700;
+            text-align: center;
+            margin-bottom: 20px;
+            text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+        }
+        #descripcion {
+            text-align: justify;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="stars"></canvas>
+    <div class="container">
+        <h1>Calculadora de Compatibilidad de Nombres</h1>
+        <input type="text" id="nombre1" placeholder="Ingresa el primer nombre">
+        <input type="text" id="nombre2" placeholder="Ingresa el segundo nombre">
+        <button onclick="calcularCompatibilidad()">Revelar Compatibilidad</button>
+        <div id="resultado">
+            <div id="compatibilidad"></div>
+            <div id="descripcion"></div>
+        </div>
+    </div>
+
+    <script>
+        function calcularValorNombre(nombre) {
+            const tablaAlfaNumerica = {
+                'a': 1, 'b': 2, 'c': 3, 'd': 4, 'e': 5, 'f': 6, 'g': 7, 'h': 8, 'i': 9,
+                'j': 1, 'k': 2, 'l': 3, 'm': 4, 'n': 5, 'ñ': 5, 'o': 6, 'p': 7, 'q': 8,
+                'r': 9, 's': 1, 't': 2, 'u': 3, 'v': 4, 'w': 5, 'x': 6, 'y': 7, 'z': 8
+            };
+            
+            let suma = 0;
+            for (let letra of nombre.toLowerCase()) {
+                if (tablaAlfaNumerica.hasOwnProperty(letra)) {
+                    suma += tablaAlfaNumerica[letra];
+                }
+            }
+            
+            while (suma > 9) {
+                suma = suma.toString().split('').reduce((a, b) => parseInt(a) + parseInt(b), 0);
+            }
+            
+            return suma;
+        }
+
+        function calcularCompatibilidad() {
+            const nombre1 = document.getElementById('nombre1').value;
+            const nombre2 = document.getElementById('nombre2').value;
+            
+            if (!nombre1 || !nombre2) {
+                alert("Por favor, ingresa ambos nombres.");
+                return;
+            }
+
+            const valor1 = calcularValorNombre(nombre1);
+            const valor2 = calcularValorNombre(nombre2);
+            
+            const compatibilidad = (valor1 + valor2) % 10 + 1; // Asegura un valor entre 1 y 10
+            
+            const descripciones = [
+                "Compatibilidad baja. Pueden enfrentar desafíos significativos en su relación.",
+                "Compatibilidad moderada-baja. Necesitarán trabajar en su comunicación.",
+                "Compatibilidad moderada. Hay potencial, pero requerirá esfuerzo mutuo.",
+                "Compatibilidad buena. Tienen una base sólida para construir una relación.",
+                "Compatibilidad muy buena. Comparten muchos valores y objetivos.",
+                "Compatibilidad excelente. Tienen una conexión natural y armoniosa.",
+                "Compatibilidad sobresaliente. Su relación tiene un gran potencial de crecimiento.",
+                "Compatibilidad excepcional. Están destinados a tener una relación profunda y duradera.",
+                "Compatibilidad casi perfecta. Su conexión es rara y especial.",
+                "Compatibilidad perfecta. Una pareja destinada, con una conexión extraordinaria."
+            ];
+
+            document.getElementById('compatibilidad').innerHTML = `Compatibilidad: ${compatibilidad}/10`;
+            document.getElementById('descripcion').innerHTML = descripciones[compatibilidad - 1];
+        }
+
+        // Animación de estrellas (código igual que en el ejemplo anterior)
+        // ...
+    </script>
+</body>
+</html>
